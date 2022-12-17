@@ -45,7 +45,8 @@ class HbnTaskRepositoryTest {
         repository.add(task);
         anotherTask.setId(task.getId());
         repository.update(anotherTask);
-        assertThat(anotherTask.getDescription()).isEqualTo("new desc");
+        Task task1 = repository.findById(task.getId()).get();
+        assertThat(task1.getDescription()).isEqualTo("new desc");
     }
 
     @Test
