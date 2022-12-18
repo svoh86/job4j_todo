@@ -14,9 +14,9 @@ import java.util.Optional;
 public interface TaskRepository {
     Task add(Task task);
 
-    void update(Task task);
+    boolean update(Task task);
 
-    void delete(int id);
+    boolean delete(int id);
 
     List<Task> findAll();
 
@@ -26,5 +26,5 @@ public interface TaskRepository {
 
     List<Task> findByDone(boolean flag);
 
-    void changeDone(int id);
+    boolean changeDone(int id);
 }

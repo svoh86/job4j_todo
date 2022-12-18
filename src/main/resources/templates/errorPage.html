@@ -37,40 +37,7 @@
         </div>
     </nav>
     <div class="row">
-        <table class="table table-bordered">
-            <col style="width:70%">
-            <col style="width:15%">
-            <col style="width:15%">
-            <thead>
-            <tr class="table-primary">
-                <th scope="col">Название задачи</th>
-                <th scope="col">Дата создания</th>
-                <th scope="col">Состояние задачи</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="table-secondary" th:each="task:${all}">
-                <td>
-                    <a th:href="@{|/tasks/${task.id}|}">
-                        <span th:text="${task.description}"/>
-                    </a>
-                </td>
-                <td th:text="${#temporals.format(task.created, 'dd-MM-yyyy HH:mm')}"/>
-                <td>
-                    <span th:if="${task.done}">
-                        <span class="badge badge-success">Выполнено</span>
-                    </span>
-                    <span th:if="${!task.done}">
-                        <span class="badge badge-danger">Не выполнено</span>
-                    </span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <a class="btn btn-primary" th:href="@{/tasks/add}" role="button">Добавить задание</a>
-    </div>
-    <div th:if="${fail}" class="alert alert-danger" role="alert">
-        Такая задача не существует!
+        <span th:text="${message}"/>
     </div>
 </div>
 </body>

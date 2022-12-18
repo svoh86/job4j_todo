@@ -59,11 +59,12 @@ public class HbnTaskRepository implements TaskRepository {
      * @param task задача
      */
     @Override
-    public void update(Task task) {
+    public boolean update(Task task) {
         Session session = sf.openSession();
+        int i = 0;
         try {
             session.beginTransaction();
-            session.createQuery(UPDATE)
+            i = session.createQuery(UPDATE)
                     .setParameter("fDescription", task.getDescription())
                     .setParameter("fCreated", LocalDateTime.now())
                     .setParameter("fDone", task.isDone())
@@ -75,6 +76,7 @@ public class HbnTaskRepository implements TaskRepository {
         } finally {
             session.close();
         }
+        return i != 0;
     }
 
     /**
@@ -83,11 +85,12 @@ public class HbnTaskRepository implements TaskRepository {
      * @param id идентификатор задачи
      */
     @Override
-    public void delete(int id) {
+    public boolean delete(int id) {
         Session session = sf.openSession();
+        int i = 0;
         try {
             session.beginTransaction();
-            session.createQuery(DELETE)
+            i = session.createQuery(DELETE)
                     .setParameter("fId", id)
                     .executeUpdate();
             session.getTransaction().commit();
@@ -96,6 +99,7 @@ public class HbnTaskRepository implements TaskRepository {
         } finally {
             session.close();
         }
+        return i != 0;
     }
 
     /**
@@ -166,11 +170,12 @@ public class HbnTaskRepository implements TaskRepository {
      * @param id id задачи
      */
     @Override
-    public void changeDone(int id) {
+    public boolean changeDone(int id) {
         Session session = sf.openSession();
+        int i = 0;
         try {
             session.beginTransaction();
-            session.createQuery(UPDATE_DONE)
+            i = session.createQuery(UPDATE_DONE)
                     .setParameter("fId", id)
                     .executeUpdate();
             session.getTransaction().commit();
@@ -179,5 +184,6 @@ public class HbnTaskRepository implements TaskRepository {
         } finally {
             session.close();
         }
+        return i != 0;
     }
 }

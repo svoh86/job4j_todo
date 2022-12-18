@@ -25,13 +25,13 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public void update(Task task) {
-        repository.update(task);
+    public boolean update(Task task) {
+        return repository.update(task);
     }
 
     @Override
-    public void delete(int id) {
-        repository.delete(id);
+    public boolean delete(int id) {
+        return repository.delete(id);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public void changeDone(int id) {
-        repository.changeDone(id);
+    public boolean changeDone(int id) {
+        return repository.changeDone(id);
     }
 }

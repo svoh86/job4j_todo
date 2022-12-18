@@ -29,10 +29,10 @@ public class TaskController {
      * Показывает основную страницу со всеми задачами
      *
      * @param model Model
-     * @return task
+     * @return tasks
      */
     @GetMapping
-    public String task(Model model) {
+    public String tasks(Model model) {
         model.addAttribute("tasks", service.findAll());
         return "tasks";
     }
@@ -40,11 +40,10 @@ public class TaskController {
     /**
      * Показывает страницу с формой добавления задачи
      *
-     * @param model Model
      * @return add
      */
     @GetMapping("/add")
-    public String addTask(Model model) {
+    public String addTask() {
         return "add";
     }
 
@@ -68,8 +67,10 @@ public class TaskController {
      * @return all
      */
     @GetMapping("/all")
-    public String allTasks(Model model) {
+    public String allTasks(Model model,
+                           @RequestParam(name = "fail", required = false) Boolean fail) {
         model.addAttribute("all", service.findAll());
+        model.addAttribute("fail", fail != null);
         return "all";
     }
 
@@ -108,7 +109,7 @@ public class TaskController {
     public String updateTask(Model model, @PathVariable("taskId") int taskId) {
         Optional<Task> taskDb = service.findById(taskId);
         if (taskDb.isEmpty()) {
-            return "redirect:/tasks";
+            return "redirect:/tasks/all?fail=true";
         }
         model.addAttribute("task", taskDb.get());
         return "update";
@@ -118,11 +119,15 @@ public class TaskController {
      * Меняет состояние задачи на "Выполнено"
      *
      * @param taskId id задачи
-     * @return redirect:/tasks/done
+     * @return redirect:/tasks/done или errorPage
      */
     @GetMapping("/done/{taskId}")
-    public String doneTask(@PathVariable("taskId") int taskId) {
-        service.changeDone(taskId);
+    public String doneTask(@PathVariable("taskId") int taskId, Model model) {
+        boolean done = service.changeDone(taskId);
+        if (!done) {
+            model.addAttribute("message", "Изменения состояния не произошло!");
+            return "errorPage";
+        }
         return "redirect:/tasks/done";
     }
 
@@ -136,10 +141,12 @@ public class TaskController {
      */
     @GetMapping("/edit/{taskId}")
     public String formUpdateTask(Model model, @PathVariable("taskId") int taskId, HttpSession httpSession) {
-        Task task = service.findById(taskId).get();
-
-        model.addAttribute("task", task);
-        httpSession.setAttribute("task", task);
+        Optional<Task> taskDb = service.findById(taskId);
+        if (taskDb.isEmpty()) {
+            return "redirect:/tasks/all?fail=true";
+        }
+        model.addAttribute("task", taskDb.get());
+        httpSession.setAttribute("task", taskDb.get());
         return "edit";
     }
 
@@ -148,15 +155,19 @@ public class TaskController {
      *
      * @param task        задача
      * @param httpSession HttpSession
-     * @return redirect:/tasks/all
+     * @return redirect:/tasks/all или errorPage
      */
     @PostMapping("/edit")
-    public String editTask(@ModelAttribute Task task, HttpSession httpSession) {
+    public String editTask(@ModelAttribute Task task, HttpSession httpSession, Model model) {
         Task taskSession = (Task) httpSession.getAttribute("task");
         task.setId(taskSession.getId());
         task.setCreated(LocalDateTime.now());
         task.setDone(taskSession.isDone());
-        service.update(task);
+        boolean update = service.update(task);
+        if (!update) {
+            model.addAttribute("message", "Обновление задачи не произошло!");
+            return "errorPage";
+        }
         return "redirect:/tasks/all";
     }
 
@@ -164,11 +175,15 @@ public class TaskController {
      * Удаление конкретной задачи
      *
      * @param taskId id задачи
-     * @return redirect:/tasks/all
+     * @return redirect:/tasks/all или errorPage
      */
     @GetMapping("/delete/{taskId}")
-    public String deleteTask(@PathVariable("taskId") int taskId) {
-        service.delete(taskId);
+    public String deleteTask(@PathVariable("taskId") int taskId, Model model) {
+        boolean delete = service.delete(taskId);
+        if (!delete) {
+            model.addAttribute("message", "Удаление задачи не произошло!");
+            return "errorPage";
+        }
         return "redirect:/tasks/all";
     }
 }
