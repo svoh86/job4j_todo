@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import ru.job4j.todo.Main;
+import ru.job4j.todo.config.HibernateConfiguration;
 import ru.job4j.todo.model.Task;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 class HbnTaskRepositoryTest {
-    private final SessionFactory sf = new Main().sf();
+    private final SessionFactory sf = new HibernateConfiguration().sf();
     private final HbnTaskRepository repository = new HbnTaskRepository(sf);
 
     @AfterEach
