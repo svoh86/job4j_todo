@@ -30,9 +30,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav" align="center">
-                <a class="nav-item nav-link" th:href="@{/allTasks}">Все задачи</a>
-                <a class="nav-item nav-link" th:href="@{/doneTasks}">Выполненные задачи</a>
-                <a class="nav-item nav-link" th:href="@{/newTasks}">Новые задачи</a>
+                <a class="nav-item nav-link" th:href="@{/tasks/all}">Все задачи</a>
+                <a class="nav-item nav-link" th:href="@{/tasks/done}">Выполненные задачи</a>
+                <a class="nav-item nav-link" th:href="@{/tasks/new}">Новые задачи</a>
             </div>
         </div>
     </nav>
@@ -49,12 +49,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="table-secondary" th:each="task:${newTasks}">
-                <td>
-                    <a th:href="@{|/tasks/${task.id}|}">
-                        <span th:text="${task.description}"/>
-                    </a>
-                </td>
+            <tr class="table-secondary" th:each="task:${tasks}">
+                <td th:text="${task.description}"/>
                 <td th:text="${#temporals.format(task.created, 'dd-MM-yyyy HH:mm')}"/>
                 <td>
                     <span th:if="${task.done}">
@@ -67,7 +63,7 @@
             </tr>
             </tbody>
         </table>
-        <a class="btn btn-primary" th:href="@{/addTask}" role="button">Добавить задание</a>
+        <a class="btn btn-primary" th:href="@{/tasks/add}" role="button">Добавить задание</a>
     </div>
 </div>
 </body>

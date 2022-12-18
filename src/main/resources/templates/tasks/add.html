@@ -27,9 +27,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav" align="center">
-                <a class="nav-item nav-link" th:href="@{/allTasks}">Все задачи</a>
-                <a class="nav-item nav-link" th:href="@{/doneTasks}">Выполненные задачи</a>
-                <a class="nav-item nav-link" th:href="@{/newTasks}">Новые задачи</a>
+                <a class="nav-item nav-link" th:href="@{/tasks/all}">Все задачи</a>
+                <a class="nav-item nav-link" th:href="@{/tasks/done}">Выполненные задачи</a>
+                <a class="nav-item nav-link" th:href="@{/tasks/new}">Новые задачи</a>
             </div>
         </div>
     </nav>
@@ -39,7 +39,7 @@
                 Новая задача
             </div>
             <div class="card-body">
-                <form th:action="@{/createTask}" method="POST">
+                <form th:action="@{/tasks/create}" method="POST">
                     <div class="form-group">
                         <label>Название задачи</label>
                         <input type="text" class="form-control" placeholder="Название задачи" name="description">
