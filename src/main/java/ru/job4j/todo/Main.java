@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Bean;
 public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
-        System.out.println("Go to http://localhost:8080/tasks");
+        System.out.println("Go to http://localhost:8080/index");
     }
 
     @Bean(destroyMethod = "close")
