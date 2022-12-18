@@ -30,6 +30,7 @@ public class HbnTaskRepository implements TaskRepository {
     private static final String FIND_BY_ID = "from Task WHERE id = :fId";
     private static final String FIND_BY_LIKE_DESCRIPTION = "from Task WHERE description LIKE :fKey";
     private static final String FIND_BY_DONE = "from Task WHERE done = :fDone";
+    private static final String UPDATE_DONE = "UPDATE Task SET done = true WHERE id = :fId";
 
     /**
      * Добавляет задачу в БД
@@ -157,5 +158,26 @@ public class HbnTaskRepository implements TaskRepository {
         List<Task> taskList = query.list();
         session.close();
         return taskList;
+    }
+
+    /**
+     * Обновляет у задачи поле done
+     *
+     * @param id id задачи
+     */
+    @Override
+    public void changeDone(int id) {
+        Session session = sf.openSession();
+        try {
+            session.beginTransaction();
+            session.createQuery(UPDATE_DONE)
+                    .setParameter("fId", id)
+                    .executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
     }
 }

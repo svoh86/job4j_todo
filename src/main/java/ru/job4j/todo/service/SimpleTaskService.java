@@ -53,4 +53,9 @@ public class SimpleTaskService implements TaskService {
     public List<Task> findByDone(boolean flag) {
         return repository.findByDone(flag);
     }
+
+    @Override
+    public void changeDone(int id) {
+        repository.changeDone(id);
+    }
 }

@@ -119,19 +119,13 @@ public class TaskController {
     /**
      * Меняет состояние задачи на "Выполнено"
      *
-     * @param model  Model
      * @param taskId id задачи
-     * @return updateTask
+     * @return redirect:/doneTasks
      */
     @GetMapping("/doneTask/{taskId}")
-    public String doneTask(Model model, @PathVariable("taskId") int taskId) {
-        Task task = service.findById(taskId).get();
-        if (!task.isDone()) {
-            task.setDone(true);
-        }
-        service.update(task);
-        model.addAttribute("task", task);
-        return "updateTask";
+    public String doneTask(@PathVariable("taskId") int taskId) {
+        service.changeDone(taskId);
+        return "redirect:/doneTasks";
     }
 
     /**
@@ -145,6 +139,7 @@ public class TaskController {
     @GetMapping("/editTask/{taskId}")
     public String formUpdateTask(Model model, @PathVariable("taskId") int taskId, HttpSession httpSession) {
         Task task = service.findById(taskId).get();
+
         model.addAttribute("task", task);
         httpSession.setAttribute("task", task);
         return "editTask";
