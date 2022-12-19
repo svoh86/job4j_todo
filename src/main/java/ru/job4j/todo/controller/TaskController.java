@@ -29,22 +29,22 @@ public class TaskController {
      * Показывает основную страницу со всеми задачами
      *
      * @param model Model
-     * @return tasks
+     * @return tasks/tasks
      */
     @GetMapping
     public String tasks(Model model) {
         model.addAttribute("tasks", service.findAll());
-        return "tasks";
+        return "tasks/tasks";
     }
 
     /**
      * Показывает страницу с формой добавления задачи
      *
-     * @return add
+     * @return tasks/add
      */
     @GetMapping("/add")
     public String addTask() {
-        return "add";
+        return "tasks/add";
     }
 
     /**
@@ -64,38 +64,38 @@ public class TaskController {
      * Показывает страницу со всеми задачами
      *
      * @param model Model
-     * @return all
+     * @return tasks/all
      */
     @GetMapping("/all")
     public String allTasks(Model model,
                            @RequestParam(name = "fail", required = false) Boolean fail) {
         model.addAttribute("all", service.findAll());
         model.addAttribute("fail", fail != null);
-        return "all";
+        return "tasks/all";
     }
 
     /**
      * Показывает страницу с выполненными заданиями
      *
      * @param model Model
-     * @return done
+     * @return tasks/done
      */
     @GetMapping("/done")
     public String doneTasks(Model model) {
         model.addAttribute("done", service.findByDone(true));
-        return "done";
+        return "tasks/done";
     }
 
     /**
      * Показывает страницу с новыми заданиями
      *
      * @param model Model
-     * @return new
+     * @return tasks/new
      */
     @GetMapping("/new")
     public String newTasks(Model model) {
         model.addAttribute("newTasks", service.findByDone(false));
-        return "new";
+        return "tasks/new";
     }
 
     /**
@@ -103,7 +103,7 @@ public class TaskController {
      *
      * @param model  Model
      * @param taskId id задачи
-     * @return update
+     * @return tasks/update
      */
     @GetMapping("/{taskId}")
     public String updateTask(Model model, @PathVariable("taskId") int taskId) {
@@ -112,7 +112,7 @@ public class TaskController {
             return "redirect:/tasks/all?fail=true";
         }
         model.addAttribute("task", taskDb.get());
-        return "update";
+        return "tasks/update";
     }
 
     /**
@@ -137,7 +137,7 @@ public class TaskController {
      * @param model       Model
      * @param taskId      id задачи
      * @param httpSession HttpSession
-     * @return edit
+     * @return tasks/edit
      */
     @GetMapping("/edit/{taskId}")
     public String formUpdateTask(Model model, @PathVariable("taskId") int taskId, HttpSession httpSession) {
@@ -147,7 +147,7 @@ public class TaskController {
         }
         model.addAttribute("task", taskDb.get());
         httpSession.setAttribute("task", taskDb.get());
-        return "edit";
+        return "tasks/edit";
     }
 
     /**
