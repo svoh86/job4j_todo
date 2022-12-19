@@ -50,7 +50,23 @@ mvn spring-boot:run
 ```
 
 ## Взаимодействие с приложением
+Начальная страница
+![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/start.png)
 
+Все задачи. Здесь можно выбрать конкретную задачу.
+![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/allTasks.png)
+
+Только выполненные задачи
+![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/doneTasks.png)
+
+Только новые задачи
+![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/newTasks.png)
+
+Для конкретной задачи можно установить состояние "Выполнено", отредактировать задачу или удалить
+![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/updateTask.png)
+
+Редактирование задачи
+![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/editTask.png)
 
 ## Контакты
 
