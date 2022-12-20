@@ -14,6 +14,7 @@
 Web-приложение "TODO список". Показывает список дел. Возможность выбора категории задачи (все, новые, выполненные). 
 Задачи можно редактировать, удалять, помечать как выполненные.
 Для хранения данных используется Hibernate.
+Для входа в систему пользователю необходимо зарегистрироваться. 
 
 ## Технологии
 
@@ -67,6 +68,21 @@ mvn spring-boot:run
 
 Редактирование задачи
 ![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/editTask.png)
+
+Регистрация пользователя
+![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/add.png)
+
+Неудачная регистрация
+![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/failAdd.png)
+
+Удачная регистрация
+![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/successAdd.png)
+
+Авторизация
+![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/login.png)
+
+Неудачная авторизация
+![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/failLogin.png)
 
 ## Контакты
 
