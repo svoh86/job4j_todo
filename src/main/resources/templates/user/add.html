@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -45,40 +45,36 @@
         </div>
     </nav>
     <div class="row">
-        <table class="table table-bordered">
-            <col style="width:70%">
-            <col style="width:15%">
-            <col style="width:15%">
-            <thead>
-            <tr class="table-primary">
-                <th scope="col">Название задачи</th>
-                <th scope="col">Дата создания</th>
-                <th scope="col">Состояние задачи</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="table-secondary" th:each="task:${all}">
-                <td>
-                    <a th:href="@{|/tasks/${task.id}|}">
-                        <span th:text="${task.description}"/>
-                    </a>
-                </td>
-                <td th:text="${#temporals.format(task.created, 'dd-MM-yyyy HH:mm')}"/>
-                <td>
-                    <span th:if="${task.done}">
-                        <span class="badge badge-success">Выполнено</span>
-                    </span>
-                    <span th:if="${!task.done}">
-                        <span class="badge badge-danger">Не выполнено</span>
-                    </span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <a class="btn btn-primary" th:href="@{/tasks/add}" role="button">Добавить задание</a>
-    </div>
-    <div th:if="${fail}" class="alert alert-danger" role="alert">
-        Такая задача не существует!
+        <div class="card" style="width: 100%">
+            <div class="card-header">
+                Новый пользователь
+            </div>
+            <div class="card-body">
+                <div th:if="${fail}" class="alert alert-danger" role="alert">
+                    Такой пользователь уже существует!
+                </div>
+                <div th:if="${success}" class="alert alert-success" role="alert">
+                    Успешная регистрация!
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/user/create}" method="POST">
+                        <div class="form-group">
+                            <label>Имя</label>
+                            <input type="text" class="form-control" placeholder="Имя" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label>Логин</label>
+                            <input type="text" class="form-control" placeholder="Логин" name="login">
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль</label>
+                            <input type="text" class="form-control" placeholder="Пароль" name="password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Регистрация</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>

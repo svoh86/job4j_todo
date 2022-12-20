@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <!-- Required meta tags -->
@@ -18,41 +18,37 @@
     <title>TODO</title>
 </head>
 <body>
-<div class="container">
+<div class="container pt-3">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" th:href="@{/tasks}">TODO</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav" align="center">
-                <a class="nav-item nav-link" th:href="@{/tasks/all}">Все задачи</a>
-                <a class="nav-item nav-link" th:href="@{/tasks/done}">Выполненные задачи</a>
-                <a class="nav-item nav-link" th:href="@{/tasks/new}">Новые задачи</a>
-                <a class="nav-item nav-link" th:if="${user.name == 'Гость!'}" th:href="@{/user/loginPage}">
-                    <span th:text="${user.name}"></span>
-                    <span> | Войти</span>
-                </a>
-                <a class="nav-item nav-link" th:if="${user.name != 'Гость!'}" th:href="@{/user/logout}">
-                    <span th:text="${user.name}"></span>
-                    <span> | Выйти</span>
-                </a>
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" th:href="@{/user/add}">Регистрация</a>
             </div>
         </div>
     </nav>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Новая задача
+                Авторизация
             </div>
             <div class="card-body">
-                <form th:action="@{/tasks/create}" method="POST">
+                <div th:if="${fail}" class="alert alert-danger" role="alert">
+                    Логин или пароль введены неверно!
+                </div>
+                <form th:action="@{/user/login}" method="POST">
                     <div class="form-group">
-                        <label>Название задачи</label>
-                        <input type="text" class="form-control" placeholder="Название задачи" name="description">
+                        <label>Логин</label>
+                        <input type="text" class="form-control" name="login">
                     </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="text" class="form-control" name="password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Войти</button>
                 </form>
             </div>
         </div>

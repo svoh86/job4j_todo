@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.service.TaskService;
+import ru.job4j.todo.util.UserSession;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
@@ -32,7 +33,8 @@ public class TaskController {
      * @return tasks/tasks
      */
     @GetMapping
-    public String tasks(Model model) {
+    public String tasks(Model model, HttpSession httpSession) {
+        UserSession.getUser(model, httpSession);
         model.addAttribute("tasks", service.findAll());
         return "tasks/tasks";
     }
@@ -43,7 +45,8 @@ public class TaskController {
      * @return tasks/add
      */
     @GetMapping("/add")
-    public String addTask() {
+    public String addTask(Model model, HttpSession httpSession) {
+        UserSession.getUser(model, httpSession);
         return "tasks/add";
     }
 
@@ -68,7 +71,9 @@ public class TaskController {
      */
     @GetMapping("/all")
     public String allTasks(Model model,
-                           @RequestParam(name = "fail", required = false) Boolean fail) {
+                           @RequestParam(name = "fail", required = false) Boolean fail,
+                           HttpSession httpSession) {
+        UserSession.getUser(model, httpSession);
         model.addAttribute("all", service.findAll());
         model.addAttribute("fail", fail != null);
         return "tasks/all";
@@ -81,7 +86,8 @@ public class TaskController {
      * @return tasks/done
      */
     @GetMapping("/done")
-    public String doneTasks(Model model) {
+    public String doneTasks(Model model, HttpSession httpSession) {
+        UserSession.getUser(model, httpSession);
         model.addAttribute("done", service.findByDone(true));
         return "tasks/done";
     }
@@ -93,7 +99,8 @@ public class TaskController {
      * @return tasks/new
      */
     @GetMapping("/new")
-    public String newTasks(Model model) {
+    public String newTasks(Model model, HttpSession httpSession) {
+        UserSession.getUser(model, httpSession);
         model.addAttribute("newTasks", service.findByDone(false));
         return "tasks/new";
     }
@@ -106,7 +113,8 @@ public class TaskController {
      * @return tasks/update
      */
     @GetMapping("/{taskId}")
-    public String updateTask(Model model, @PathVariable("taskId") int taskId) {
+    public String updateTask(Model model, @PathVariable("taskId") int taskId, HttpSession httpSession) {
+        UserSession.getUser(model, httpSession);
         Optional<Task> taskDb = service.findById(taskId);
         if (taskDb.isEmpty()) {
             return "redirect:/tasks/all?fail=true";
@@ -141,6 +149,7 @@ public class TaskController {
      */
     @GetMapping("/edit/{taskId}")
     public String formUpdateTask(Model model, @PathVariable("taskId") int taskId, HttpSession httpSession) {
+        UserSession.getUser(model, httpSession);
         Optional<Task> taskDb = service.findById(taskId);
         if (taskDb.isEmpty()) {
             return "redirect:/tasks/all?fail=true";

@@ -33,6 +33,14 @@
                 <a class="nav-item nav-link" th:href="@{/tasks/all}">Все задачи</a>
                 <a class="nav-item nav-link" th:href="@{/tasks/done}">Выполненные задачи</a>
                 <a class="nav-item nav-link" th:href="@{/tasks/new}">Новые задачи</a>
+                <a class="nav-item nav-link" th:if="${user.name == 'Гость!'}" th:href="@{/user/loginPage}">
+                    <span th:text="${user.name}"></span>
+                    <span> | Войти</span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.name != 'Гость!'}" th:href="@{/user/logout}">
+                    <span th:text="${user.name}"></span>
+                    <span> | Выйти</span>
+                </a>
             </div>
         </div>
     </nav>
