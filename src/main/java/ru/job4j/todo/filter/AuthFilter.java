@@ -6,6 +6,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * Класс фильтр.
@@ -18,6 +19,13 @@ import java.io.IOException;
  */
 @Component
 public class AuthFilter implements Filter {
+    private final Set<String> uriSet = Set.of(
+            "index", "tasks", "user/loginPage", "user/login", "user/add", "user/create");
+
+    private boolean matchUri(String uri) {
+        return uriSet.stream().anyMatch(uri::endsWith);
+    }
+
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
@@ -25,12 +33,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse res = (HttpServletResponse) servletResponse;
         String uri = req.getRequestURI();
-        if (uri.endsWith("index")
-            || uri.endsWith("tasks")
-            || uri.endsWith("user/loginPage")
-            || uri.endsWith("user/login")
-            || uri.endsWith("user/add")
-            || uri.endsWith("user/create")) {
+        if (matchUri(uri)) {
             filterChain.doFilter(req, res);
             return;
         }

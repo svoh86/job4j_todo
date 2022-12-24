@@ -12,7 +12,11 @@ import javax.servlet.http.HttpSession;
  * @author Svistunov Mikhail
  * @version 1.0
  */
-public class UserSession {
+public final class UserSession {
+
+    private UserSession() {
+    }
+
     public static void getUser(Model model, HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");
         if (user == null) {
