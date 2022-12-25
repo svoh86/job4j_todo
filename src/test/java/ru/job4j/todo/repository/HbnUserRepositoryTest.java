@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.*;
 
 class HbnUserRepositoryTest {
     private final SessionFactory sf = new HibernateConfiguration().sf();
-    private final HbnUserRepository repository = new HbnUserRepository(sf);
+    private final HbnUserRepository repository = new HbnUserRepository(new CrudRepository(sf));
 
     @AfterEach
     private void afterEach() {
@@ -61,7 +61,7 @@ class HbnUserRepositoryTest {
     @Test
     public void whenAddAndFindByLoginAndPassword() {
         User user = new User("user", "login", "password");
-        User user2 = new User("new user", "login", "password");
+        User user2 = new User("new user", "login2", "password");
         Optional<User> optionalUser = repository.add(user);
         repository.add(user2);
         Optional<User> userById = repository.findById(optionalUser.get().getId());
