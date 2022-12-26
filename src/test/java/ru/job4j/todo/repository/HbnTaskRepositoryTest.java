@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import ru.job4j.todo.config.HibernateConfiguration;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ import static org.assertj.core.api.Assertions.*;
 class HbnTaskRepositoryTest {
     private final SessionFactory sf = new HibernateConfiguration().sf();
     private final HbnTaskRepository repository = new HbnTaskRepository(new CrudRepository(sf));
+    private final HbnUserRepository repositoryUser = new HbnUserRepository(new CrudRepository(sf));
+    private final User user = new User("name", "login", "password");
 
     @AfterEach
     private void afterEach() {
@@ -21,6 +24,8 @@ class HbnTaskRepositoryTest {
         try {
             session.beginTransaction();
             session.createQuery("DELETE Task")
+                    .executeUpdate();
+            session.createQuery("DELETE User")
                     .executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -33,6 +38,8 @@ class HbnTaskRepositoryTest {
     @Test
     public void whenAddAndFindAll() {
         Task task = new Task("desc", false);
+        repositoryUser.add(user);
+        task.setUser(user);
         repository.add(task);
         List<Task> taskList = List.of(task);
         assertThat(taskList).isEqualTo(repository.findAll());
@@ -42,6 +49,9 @@ class HbnTaskRepositoryTest {
     public void whenUpdateAndFindAll() {
         Task task = new Task("desc", false);
         Task anotherTask = new Task("new desc", false);
+        repositoryUser.add(user);
+        task.setUser(user);
+        anotherTask.setUser(user);
         repository.add(task);
         anotherTask.setId(task.getId());
         repository.update(anotherTask);
@@ -53,6 +63,9 @@ class HbnTaskRepositoryTest {
     public void whenAddThenDeleteAndFindAll() {
         Task task = new Task("desc", false);
         Task anotherTask = new Task("new desc", false);
+        repositoryUser.add(user);
+        task.setUser(user);
+        anotherTask.setUser(user);
         repository.add(task);
         repository.add(anotherTask);
         repository.delete(anotherTask.getId());
@@ -63,6 +76,8 @@ class HbnTaskRepositoryTest {
     @Test
     public void whenAddAndFindById() {
         Task task = new Task("desc", false);
+        repositoryUser.add(user);
+        task.setUser(user);
         repository.add(task);
         Task task1 = repository.findById(task.getId()).get();
         assertThat(task1).isEqualTo(task);
@@ -72,6 +87,9 @@ class HbnTaskRepositoryTest {
     public void whenAddAndFindByLikeDescription() {
         Task task = new Task("desc", false);
         Task anotherTask = new Task("new", true);
+        repositoryUser.add(user);
+        task.setUser(user);
+        anotherTask.setUser(user);
         repository.add(task);
         repository.add(anotherTask);
         List<Task> likeDescription = repository.findByLikeDescription("es");
@@ -83,6 +101,9 @@ class HbnTaskRepositoryTest {
     public void whenAddAndFindByDone() {
         Task task = new Task("desc", false);
         Task anotherTask = new Task("new", true);
+        repositoryUser.add(user);
+        task.setUser(user);
+        anotherTask.setUser(user);
         repository.add(task);
         repository.add(anotherTask);
         List<Task> listByDone = repository.findByDone(true);

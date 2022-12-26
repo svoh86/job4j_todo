@@ -38,6 +38,9 @@ public class Task {
     private LocalDateTime created = LocalDateTime.now();
     @EqualsAndHashCode.Exclude
     private boolean done;
+    @ManyToOne
+    @JoinColumn(name = "todo_user_id")
+    private User user;
 
     public Task(String description, boolean done) {
         this.description = description;

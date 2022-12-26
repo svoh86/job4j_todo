@@ -46,7 +46,8 @@
     </nav>
     <div class="row">
         <table class="table table-bordered">
-            <col style="width:70%">
+            <col style="width:55%">
+            <col style="width:15%">
             <col style="width:15%">
             <col style="width:15%">
             <thead>
@@ -54,6 +55,7 @@
                 <th scope="col">Название задачи</th>
                 <th scope="col">Дата создания</th>
                 <th scope="col">Состояние задачи</th>
+                <th scope="col">Пользователь</th>
             </tr>
             </thead>
             <tbody>
@@ -72,6 +74,7 @@
                         <span class="badge badge-danger">Не выполнено</span>
                     </span>
                 </td>
+                <td th:text="${task.user.name}"/>
             </tr>
             </tbody>
         </table>
