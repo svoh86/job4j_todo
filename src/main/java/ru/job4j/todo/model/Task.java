@@ -36,11 +36,23 @@ public class Task {
      */
     @EqualsAndHashCode.Exclude
     private LocalDateTime created = LocalDateTime.now();
+    /**
+     * Статус выполнения задачи
+     */
     @EqualsAndHashCode.Exclude
     private boolean done;
+    /**
+     * Внешний ключ на пользователя
+     */
     @ManyToOne
     @JoinColumn(name = "todo_user_id")
     private User user;
+    /**
+     * Внешний ключ на приоритет
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "priority_id")
+    private Priority priority;
 
     public Task(String description, boolean done) {
         this.description = description;
@@ -51,5 +63,11 @@ public class Task {
         this.description = description;
         this.created = created;
         this.done = done;
+    }
+
+    public Task(String description, boolean done, Priority priority) {
+        this.description = description;
+        this.done = done;
+        this.priority = priority;
     }
 }

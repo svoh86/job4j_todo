@@ -25,12 +25,13 @@ import java.util.Optional;
 public class HbnTaskRepository implements TaskRepository {
     private final CrudRepository crudRepository;
     private static final String UPDATE = "UPDATE Task SET description = :fDescription, "
-                                         + "created = :fCreated, done = :fDone WHERE id = :fId";
+                                         + "created = :fCreated, done = :fDone, priority = :fPriority "
+                                         + "WHERE id = :fId";
     private static final String DELETE = "DELETE Task WHERE id = :fId";
-    private static final String FIND_ALL = "FROM Task";
-    private static final String FIND_BY_ID = "FROM Task WHERE id = :fId";
+    private static final String FIND_ALL = "FROM Task t JOIN FETCH t.priority";
+    private static final String FIND_BY_ID = "FROM Task t JOIN FETCH t.priority WHERE t.id = :fId";
     private static final String FIND_BY_LIKE_DESCRIPTION = "FROM Task WHERE description LIKE :fKey";
-    private static final String FIND_BY_DONE = "FROM Task WHERE done = :fDone";
+    private static final String FIND_BY_DONE = "FROM Task t JOIN FETCH t.priority WHERE done = :fDone";
     private static final String UPDATE_DONE = "UPDATE Task SET done = true WHERE id = :fId";
 
     /**
@@ -58,7 +59,8 @@ public class HbnTaskRepository implements TaskRepository {
                         "fDescription", task.getDescription(),
                         "fCreated", LocalDateTime.now(),
                         "fDone", task.isDone(),
-                        "fId", task.getId()));
+                        "fId", task.getId(),
+                        "fPriority", task.getPriority()));
     }
 
     /**

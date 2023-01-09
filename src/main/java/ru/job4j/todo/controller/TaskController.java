@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.SimplePriorityService;
 import ru.job4j.todo.service.TaskService;
 import ru.job4j.todo.util.UserSession;
 
@@ -26,6 +27,7 @@ import java.util.Optional;
 @RequestMapping("/tasks")
 public class TaskController {
     private final TaskService service;
+    private final SimplePriorityService priorityService;
 
     /**
      * Показывает основную страницу со всеми задачами
@@ -48,6 +50,7 @@ public class TaskController {
     @GetMapping("/add")
     public String addTask(Model model, HttpSession httpSession) {
         UserSession.getUser(model, httpSession);
+        model.addAttribute("priorities", priorityService.findAll());
         return "tasks/add";
     }
 
@@ -158,6 +161,7 @@ public class TaskController {
             return "redirect:/tasks/all?fail=true";
         }
         model.addAttribute("task", taskDb.get());
+        model.addAttribute("priorities", priorityService.findAll());
         httpSession.setAttribute("task", taskDb.get());
         return "tasks/edit";
     }
@@ -175,6 +179,7 @@ public class TaskController {
         task.setId(taskSession.getId());
         task.setCreated(LocalDateTime.now());
         task.setDone(taskSession.isDone());
+        task.setPriority(priorityService.findById(task.getPriority().getId()).get());
         boolean update = service.update(task);
         if (!update) {
             model.addAttribute("message", "Обновление задачи не произошло!");

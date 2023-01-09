@@ -46,7 +46,8 @@
     </nav>
     <div class="row">
         <table class="table table-bordered">
-            <col style="width:55%">
+            <col style="width:40%">
+            <col style="width:15%">
             <col style="width:15%">
             <col style="width:15%">
             <col style="width:15%">
@@ -56,6 +57,7 @@
                 <th scope="col">Дата создания</th>
                 <th scope="col">Состояние задачи</th>
                 <th scope="col">Пользователь</th>
+                <th scope="col">Приоритет</th>
             </tr>
             </thead>
             <tbody>
@@ -71,6 +73,7 @@
                     </span>
                 </td>
                 <td th:text="${task.user.name}"/>
+                <td th:text="${task.priority.name}"/>
             </tr>
             </tbody>
         </table>

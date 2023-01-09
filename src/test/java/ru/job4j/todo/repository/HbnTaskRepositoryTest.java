@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import ru.job4j.todo.config.HibernateConfiguration;
+import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 
@@ -37,7 +38,7 @@ class HbnTaskRepositoryTest {
 
     @Test
     public void whenAddAndFindAll() {
-        Task task = new Task("desc", false);
+        Task task = new Task("desc", false, new Priority(1, "low", 1));
         repositoryUser.add(user);
         task.setUser(user);
         repository.add(task);
@@ -47,8 +48,8 @@ class HbnTaskRepositoryTest {
 
     @Test
     public void whenUpdateAndFindAll() {
-        Task task = new Task("desc", false);
-        Task anotherTask = new Task("new desc", false);
+        Task task = new Task("desc", false, new Priority(1, "low", 1));
+        Task anotherTask = new Task("new desc", false, new Priority(1, "low", 1));
         repositoryUser.add(user);
         task.setUser(user);
         anotherTask.setUser(user);
@@ -61,8 +62,8 @@ class HbnTaskRepositoryTest {
 
     @Test
     public void whenAddThenDeleteAndFindAll() {
-        Task task = new Task("desc", false);
-        Task anotherTask = new Task("new desc", false);
+        Task task = new Task("desc", false, new Priority(1, "low", 1));
+        Task anotherTask = new Task("new desc", false, new Priority(1, "low", 1));
         repositoryUser.add(user);
         task.setUser(user);
         anotherTask.setUser(user);
@@ -75,7 +76,7 @@ class HbnTaskRepositoryTest {
 
     @Test
     public void whenAddAndFindById() {
-        Task task = new Task("desc", false);
+        Task task = new Task("desc", false, new Priority(1, "low", 1));
         repositoryUser.add(user);
         task.setUser(user);
         repository.add(task);
@@ -99,8 +100,8 @@ class HbnTaskRepositoryTest {
 
     @Test
     public void whenAddAndFindByDone() {
-        Task task = new Task("desc", false);
-        Task anotherTask = new Task("new", true);
+        Task task = new Task("desc", false, new Priority(1, "low", 1));
+        Task anotherTask = new Task("new", true, new Priority(1, "low", 1));
         repositoryUser.add(user);
         task.setUser(user);
         anotherTask.setUser(user);

@@ -52,6 +52,12 @@
                         <label>Название задачи</label>
                         <input type="text" class="form-control" placeholder="Название задачи" name="description">
                     </div>
+                    <div class="form-group">
+                        <label for="priority.id">Приоритет задачи</label>
+                        <select class="form-control" id="priority.id" name="priority.id">
+                            <option th:each="priority : ${priorities}" th:value="${priority.id}" th:text="${priority.name}"></option>
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
             </div>
