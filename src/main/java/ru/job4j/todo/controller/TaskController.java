@@ -5,6 +5,7 @@ import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.SimplePriorityService;
@@ -179,7 +180,7 @@ public class TaskController {
         task.setId(taskSession.getId());
         task.setCreated(LocalDateTime.now());
         task.setDone(taskSession.isDone());
-        task.setPriority(priorityService.findById(task.getPriority().getId()).get());
+        task.setUser(taskSession.getUser());
         boolean update = service.update(task);
         if (!update) {
             model.addAttribute("message", "Обновление задачи не произошло!");

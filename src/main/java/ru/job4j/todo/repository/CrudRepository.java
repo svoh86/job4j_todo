@@ -41,6 +41,16 @@ public class CrudRepository {
     }
 
     /**
+     * Метод принимает предикат и передает его как команду на выполнение в метод tx()
+     *
+     * @param predicate предикат
+     * @return boolean
+     */
+    public boolean condition(Predicate<Session> predicate) {
+        return tx(predicate::test);
+    }
+
+    /**
      * Метод принимает запрос и Map с параметрами запроса.
      * Далее создается команда, которую передаем на выполнение в метод tx().
      *

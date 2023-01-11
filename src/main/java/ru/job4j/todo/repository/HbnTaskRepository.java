@@ -2,9 +2,6 @@ package ru.job4j.todo.repository;
 
 import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
 
@@ -53,14 +50,7 @@ public class HbnTaskRepository implements TaskRepository {
      */
     @Override
     public boolean update(Task task) {
-        return crudRepository.condition(
-                UPDATE,
-                Map.of(
-                        "fDescription", task.getDescription(),
-                        "fCreated", LocalDateTime.now(),
-                        "fDone", task.isDone(),
-                        "fId", task.getId(),
-                        "fPriority", task.getPriority()));
+        return crudRepository.condition(session -> task.equals(session.merge(task)));
     }
 
     /**
