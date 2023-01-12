@@ -26,6 +26,10 @@ public class SimpleTaskService implements TaskService {
 
     @Override
     public boolean update(Task task) {
+        Optional<Task> taskOptional = repository.findById(task.getId());
+        if (taskOptional.isEmpty() || taskOptional.get().getPriority() == null) {
+            return false;
+        }
         return repository.update(task);
     }
 
