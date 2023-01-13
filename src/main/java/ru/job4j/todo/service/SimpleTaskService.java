@@ -3,7 +3,9 @@ package ru.job4j.todo.service;
 import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
+import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.repository.PriorityRepository;
 import ru.job4j.todo.repository.TaskRepository;
 
 import java.util.List;
@@ -18,19 +20,23 @@ import java.util.Optional;
 @AllArgsConstructor
 public class SimpleTaskService implements TaskService {
     private final TaskRepository repository;
+    private final PriorityRepository priorityRepository;
 
     @Override
     public Task add(Task task) {
         return repository.add(task);
     }
 
+    /**
+     * Метод проверяет, что приоритет существует и обновляет задачу.
+     *
+     * @param task задача
+     * @return true or false
+     */
     @Override
     public boolean update(Task task) {
-        Optional<Task> taskOptional = repository.findById(task.getId());
-        if (taskOptional.isEmpty() || taskOptional.get().getPriority() == null) {
-            return false;
-        }
-        return repository.update(task);
+        Optional<Priority> priorityOptional = priorityRepository.findById(task.getPriority().getId());
+        return priorityOptional.isPresent() && repository.update(task);
     }
 
     @Override
