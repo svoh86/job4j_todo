@@ -12,9 +12,9 @@ import java.util.Optional;
  * @version 1.0
  */
 public interface TaskService {
-    Task add(Task task);
+    Task add(Task task, List<Integer> categories);
 
-    boolean update(Task task);
+    boolean update(Task task, List<Integer> categories);
 
     boolean delete(int id);
 

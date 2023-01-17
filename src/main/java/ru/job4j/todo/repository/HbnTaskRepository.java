@@ -5,7 +5,6 @@ import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -21,14 +20,13 @@ import java.util.Optional;
 @AllArgsConstructor
 public class HbnTaskRepository implements TaskRepository {
     private final CrudRepository crudRepository;
-    private static final String UPDATE = "UPDATE Task SET description = :fDescription, "
-                                         + "created = :fCreated, done = :fDone, priority = :fPriority "
-                                         + "WHERE id = :fId";
     private static final String DELETE = "DELETE Task WHERE id = :fId";
-    private static final String FIND_ALL = "FROM Task t JOIN FETCH t.priority";
-    private static final String FIND_BY_ID = "FROM Task t JOIN FETCH t.priority WHERE t.id = :fId";
-    private static final String FIND_BY_LIKE_DESCRIPTION = "FROM Task WHERE description LIKE :fKey";
-    private static final String FIND_BY_DONE = "FROM Task t JOIN FETCH t.priority WHERE done = :fDone";
+    private static final String FIND_ALL = "SELECT DISTINCT t FROM Task t JOIN FETCH t.priority "
+                                           + "JOIN FETCH t.categories";
+    private static final String FIND_BY_ID = "FROM Task t JOIN FETCH t.priority JOIN FETCH t.categories WHERE t.id = :fId";
+    private static final String FIND_BY_LIKE_DESCRIPTION = "FROM Task t JOIN FETCH t.priority JOIN FETCH t.categories WHERE description LIKE :fKey";
+    private static final String FIND_BY_DONE = "SELECT DISTINCT t FROM Task t JOIN FETCH t.priority "
+                                               + "JOIN FETCH t.categories WHERE done = :fDone";
     private static final String UPDATE_DONE = "UPDATE Task SET done = true WHERE id = :fId";
 
     /**

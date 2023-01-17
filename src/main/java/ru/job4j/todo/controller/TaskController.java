@@ -5,15 +5,16 @@ import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
-import ru.job4j.todo.service.SimplePriorityService;
+import ru.job4j.todo.service.CategoryService;
+import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 import ru.job4j.todo.util.UserSession;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,7 +29,8 @@ import java.util.Optional;
 @RequestMapping("/tasks")
 public class TaskController {
     private final TaskService service;
-    private final SimplePriorityService priorityService;
+    private final PriorityService priorityService;
+    private final CategoryService categoryService;
 
     /**
      * Показывает основную страницу со всеми задачами
@@ -52,6 +54,7 @@ public class TaskController {
     public String addTask(Model model, HttpSession httpSession) {
         UserSession.getUser(model, httpSession);
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/add";
     }
 
@@ -62,11 +65,16 @@ public class TaskController {
      * @return redirect:/tasks/all
      */
     @PostMapping("/create")
-    public String createTask(@ModelAttribute Task task, Model model, HttpSession httpSession) {
+    public String createTask(@ModelAttribute Task task, Model model, HttpSession httpSession,
+                             @RequestParam(value = "category.id", required = false) List<Integer> categoriesId) {
         User user = UserSession.getUser(model, httpSession);
         task.setCreated(LocalDateTime.now());
         task.setUser(user);
-        service.add(task);
+        if (categoriesId == null) {
+            model.addAttribute("message", "Необходимо указать категорию задачи!");
+            return "errorPage";
+        }
+        service.add(task, categoriesId);
         return "redirect:/tasks/all";
     }
 
@@ -163,6 +171,7 @@ public class TaskController {
         }
         model.addAttribute("task", taskDb.get());
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         httpSession.setAttribute("task", taskDb.get());
         return "tasks/edit";
     }
@@ -175,13 +184,18 @@ public class TaskController {
      * @return redirect:/tasks/all или errorPage
      */
     @PostMapping("/edit")
-    public String editTask(@ModelAttribute Task task, HttpSession httpSession, Model model) {
+    public String editTask(@ModelAttribute Task task, HttpSession httpSession, Model model,
+                           @RequestParam(value = "category.id", required = false) List<Integer> categoriesId) {
         Task taskSession = (Task) httpSession.getAttribute("task");
         task.setId(taskSession.getId());
         task.setCreated(LocalDateTime.now());
         task.setDone(taskSession.isDone());
         task.setUser(taskSession.getUser());
-        boolean update = service.update(task);
+        if (categoriesId == null) {
+            model.addAttribute("message", "Необходимо указать категорию задачи!");
+            return "errorPage";
+        }
+        boolean update = service.update(task, categoriesId);
         if (!update) {
             model.addAttribute("message", "Обновление задачи не произошло!");
             return "errorPage";
