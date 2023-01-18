@@ -28,17 +28,21 @@ public class SimpleTaskService implements TaskService {
 
     /**
      * Метод принимает задачу и список id категорий задачи.
-     * Проходит по всему списку категорий и добавляет категории в список категорий, если они есть.
-     * Далее этот список категорий устанавливается задаче.
+     * Проверяет, что категории существуют.
+     * Задача добавляется в БД.
      *
      * @param task       задача
      * @param categories список id категорий задачи
-     * @return задачу
+     * @return true or false
      */
     @Override
-    public Task add(Task task, List<Integer> categories) {
-        categorySet(categories, task);
-        return repository.add(task);
+    public boolean add(Task task, List<Integer> categories) {
+        boolean rsl = false;
+        if (categorySet(categories, task)) {
+            repository.add(task);
+            rsl = true;
+        }
+        return rsl;
     }
 
     /**
@@ -50,17 +54,21 @@ public class SimpleTaskService implements TaskService {
     @Override
     public boolean update(Task task, List<Integer> categories) {
         Optional<Priority> priorityOptional = priorityRepository.findById(task.getPriority().getId());
-        categorySet(categories, task);
-        return priorityOptional.isPresent() && repository.update(task);
+        return priorityOptional.isPresent() && categorySet(categories, task) && repository.update(task);
     }
 
-    private void categorySet(List<Integer> categories, Task task) {
-        List<Category> categoryList = new ArrayList<>();
-        for (int id : categories) {
-            Optional<Category> categoryOptional = categoryRepository.findById(id);
-            categoryOptional.ifPresent(categoryList::add);
-        }
+    /**
+     * Метод ищет список категорий по списку их id, если они есть.
+     * Далее этот список категорий устанавливается задаче.
+     *
+     * @param categories список id категорий задачи
+     * @param task       задача
+     * @return true or false
+     */
+    private boolean categorySet(List<Integer> categories, Task task) {
+        List<Category> categoryList = categoryRepository.findById(categories);
         task.setCategories(categoryList);
+        return categories.size() == categoryList.size();
     }
 
     @Override

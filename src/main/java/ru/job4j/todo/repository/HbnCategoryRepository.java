@@ -7,7 +7,6 @@ import ru.job4j.todo.model.Category;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Хранилище для категорий задач. Hibernate
@@ -21,12 +20,12 @@ import java.util.Optional;
 public class HbnCategoryRepository implements CategoryRepository {
     private final CrudRepository crudRepository;
     private static final String FIND_ALL = "FROM Category";
-    private static final String FIND_BY_ID = "FROM Category WHERE id = :fId";
+    private static final String FIND_BY_ID = "FROM Category WHERE id IN (:fIds)";
 
     /**
      * Поиск всех категорий задач
      *
-     * @return список всех задач
+     * @return список всех категорий
      */
     @Override
     public List<Category> findAll() {
@@ -34,15 +33,15 @@ public class HbnCategoryRepository implements CategoryRepository {
     }
 
     /**
-     * Поиск категорий задач по id
+     * Поиск списка категорий задач по id
      *
-     * @param id id задачи
-     * @return Optional задачи
+     * @param ids список id категорий
+     * @return список категорий
      */
     @Override
-    public Optional<Category> findById(int id) {
-        return crudRepository.optional(FIND_BY_ID,
+    public List<Category> findById(List<Integer> ids) {
+        return crudRepository.query(FIND_BY_ID,
                 Category.class,
-                Map.of("fId", id));
+                Map.of("fIds", ids));
     }
 }

@@ -7,7 +7,6 @@ import ru.job4j.todo.model.Category;
 import ru.job4j.todo.repository.CategoryRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Svistunov Mikhail
@@ -25,7 +24,7 @@ public class SimpleCategoryService implements CategoryService {
     }
 
     @Override
-    public Optional<Category> findById(int id) {
-        return repository.findById(id);
+    public List<Category> findById(List<Integer> ids) {
+        return repository.findById(ids);
     }
 }

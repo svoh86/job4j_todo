@@ -70,11 +70,10 @@ public class TaskController {
         User user = UserSession.getUser(model, httpSession);
         task.setCreated(LocalDateTime.now());
         task.setUser(user);
-        if (categoriesId == null) {
-            model.addAttribute("message", "Необходимо указать категорию задачи!");
+        if (!service.add(task, categoriesId)) {
+            model.addAttribute("message", "Задача не создана!");
             return "errorPage";
         }
-        service.add(task, categoriesId);
         return "redirect:/tasks/all";
     }
 
@@ -191,10 +190,6 @@ public class TaskController {
         task.setCreated(LocalDateTime.now());
         task.setDone(taskSession.isDone());
         task.setUser(taskSession.getUser());
-        if (categoriesId == null) {
-            model.addAttribute("message", "Необходимо указать категорию задачи!");
-            return "errorPage";
-        }
         boolean update = service.update(task, categoriesId);
         if (!update) {
             model.addAttribute("message", "Обновление задачи не произошло!");
