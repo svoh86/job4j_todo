@@ -11,7 +11,7 @@ import java.util.Optional;
  * @version 1.0
  */
 public interface UserService {
-    Optional<User> add(User user);
+    Optional<User> add(User user, String timeZone);
 
     boolean update(User user);
 

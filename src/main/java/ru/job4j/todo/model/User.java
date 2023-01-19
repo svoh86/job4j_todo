@@ -39,6 +39,12 @@ public class User {
      * Пароль пользователя
      */
     private String password;
+    /**
+     * Часовой пояс пользователя
+     */
+    @EqualsAndHashCode.Exclude
+    @Column(name = "user_zone")
+    private String zone;
 
     public User(String name, String login, String password) {
         this.name = name;

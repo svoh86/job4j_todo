@@ -6,11 +6,12 @@ import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.repository.CategoryRepository;
 import ru.job4j.todo.repository.PriorityRepository;
 import ru.job4j.todo.repository.TaskRepository;
+import ru.job4j.todo.util.UserZone;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,14 +77,33 @@ public class SimpleTaskService implements TaskService {
         return repository.delete(id);
     }
 
+    /**
+     * Ищет все задачи и устанавливает им время
+     * с учетом часового пояса пользователя.
+     *
+     * @param user пользователь
+     * @return список задач с часовым поясом пользователя
+     */
     @Override
-    public List<Task> findAll() {
-        return repository.findAll();
+    public List<Task> findAll(User user) {
+        List<Task> taskList = repository.findAll();
+        UserZone.setTimeZone(user, taskList);
+        return taskList;
     }
 
+    /**
+     * Ищет задачи по id и устанавливает им время
+     * с учетом часового пояса пользователя.
+     *
+     * @param id   id задачи
+     * @param user пользователь
+     * @return Optional задачи
+     */
     @Override
-    public Optional<Task> findById(int id) {
-        return repository.findById(id);
+    public Optional<Task> findById(int id, User user) {
+        Optional<Task> taskOptional = repository.findById(id);
+        taskOptional.ifPresent(task -> UserZone.setTimeZone(user, List.of(task)));
+        return taskOptional;
     }
 
     @Override
@@ -91,9 +111,19 @@ public class SimpleTaskService implements TaskService {
         return repository.findByLikeDescription(key);
     }
 
+    /**
+     * Ищет задачи по флагу "Выполнено/Не выполнено".
+     * Устанавливает этим задачам время с учетом часового пояса пользователя.
+     *
+     * @param flag флаг
+     * @param user пользователь
+     * @return список задач
+     */
     @Override
-    public List<Task> findByDone(boolean flag) {
-        return repository.findByDone(flag);
+    public List<Task> findByDone(boolean flag, User user) {
+        List<Task> taskList = repository.findByDone(flag);
+        UserZone.setTimeZone(user, taskList);
+        return taskList;
     }
 
     @Override

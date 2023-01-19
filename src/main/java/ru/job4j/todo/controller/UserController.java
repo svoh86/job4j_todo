@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.UserService;
 import ru.job4j.todo.util.UserSession;
+import ru.job4j.todo.util.UserZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -33,7 +34,7 @@ public class UserController {
      * @param fail        флаг, что пользователь уже существует.
      * @param success     флаг, что регистрация успешна.
      * @param httpSession HttpSession
-     * @return
+     * @return user/add
      */
     @GetMapping("/add")
     public String add(Model model,
@@ -43,6 +44,7 @@ public class UserController {
         UserSession.getUser(model, httpSession);
         model.addAttribute("fail", fail != null);
         model.addAttribute("success", success != null);
+        UserZone.findAll(model);
         return "user/add";
     }
 
@@ -53,8 +55,9 @@ public class UserController {
      * @return сообщение об успешной/неуспешной регистрации
      */
     @PostMapping("/create")
-    public String create(@ModelAttribute User user) {
-        Optional<User> optionalUser = service.add(user);
+    public String create(@ModelAttribute User user,
+                         @RequestParam(value = "timezone", required = false) String timeZone) {
+        Optional<User> optionalUser = service.add(user, timeZone);
         if (optionalUser.isEmpty()) {
             return "redirect:/user/add?fail=true";
         }

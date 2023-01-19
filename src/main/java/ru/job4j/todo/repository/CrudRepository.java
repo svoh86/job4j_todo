@@ -85,7 +85,7 @@ public class CrudRepository {
             for (Map.Entry<String, Object> arg : args.entrySet()) {
                 sq.setParameter(arg.getKey(), arg.getValue());
             }
-            return Optional.ofNullable(sq.getSingleResult());
+            return sq.uniqueResultOptional();
         };
         return tx(command);
     }
@@ -143,7 +143,7 @@ public class CrudRepository {
     public <T> T tx(Function<Session, T> command) {
         Session session = sf.openSession();
         Transaction tx = null;
-        try (session) {
+        try {
             tx = session.beginTransaction();
             T rsl = command.apply(session);
             tx.commit();
@@ -153,6 +153,8 @@ public class CrudRepository {
                 tx.rollback();
             }
             throw e;
+        } finally {
+            session.close();
         }
     }
 }

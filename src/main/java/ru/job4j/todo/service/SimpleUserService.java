@@ -18,8 +18,16 @@ import java.util.Optional;
 public class SimpleUserService implements UserService {
     private final UserRepository repository;
 
+    /**
+     * Добавляет пользователя и устанавливает ему указанный часовой пояс.
+     *
+     * @param user     пользователь
+     * @param timeZone часовой пояс
+     * @return Optional пользователя
+     */
     @Override
-    public Optional<User> add(User user) {
+    public Optional<User> add(User user, String timeZone) {
+        user.setZone(timeZone);
         return repository.add(user);
     }
 

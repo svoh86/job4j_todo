@@ -70,6 +70,14 @@
                             <label>Пароль</label>
                             <input type="text" class="form-control" placeholder="Пароль" name="password">
                         </div>
+                        <div class="form-group">
+                            <label for="timezone">Часовой пояс</label>
+                            <select class="form-control" id="timezone" name="timezone">
+                                <option th:each="timezone : ${timezones}"
+                                        th:value="${timezone.getID()}"
+                                        th:text="${timezone.getID() + ' ' + timezone.getDisplayName()}"></option>
+                            </select>
+                        </div>
                         <button type="submit" class="btn btn-primary">Регистрация</button>
                     </form>
                 </div>

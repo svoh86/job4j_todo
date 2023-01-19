@@ -40,8 +40,8 @@ public class TaskController {
      */
     @GetMapping
     public String tasks(Model model, HttpSession httpSession) {
-        UserSession.getUser(model, httpSession);
-        model.addAttribute("tasks", service.findAll());
+        User user = UserSession.getUser(model, httpSession);
+        model.addAttribute("tasks", service.findAll(user));
         return "tasks/tasks";
     }
 
@@ -87,8 +87,8 @@ public class TaskController {
     public String allTasks(Model model,
                            @RequestParam(name = "fail", required = false) Boolean fail,
                            HttpSession httpSession) {
-        UserSession.getUser(model, httpSession);
-        model.addAttribute("all", service.findAll());
+        User user = UserSession.getUser(model, httpSession);
+        model.addAttribute("all", service.findAll(user));
         model.addAttribute("fail", fail != null);
         return "tasks/all";
     }
@@ -101,8 +101,8 @@ public class TaskController {
      */
     @GetMapping("/done")
     public String doneTasks(Model model, HttpSession httpSession) {
-        UserSession.getUser(model, httpSession);
-        model.addAttribute("done", service.findByDone(true));
+        User user = UserSession.getUser(model, httpSession);
+        model.addAttribute("done", service.findByDone(true, user));
         return "tasks/done";
     }
 
@@ -114,8 +114,8 @@ public class TaskController {
      */
     @GetMapping("/new")
     public String newTasks(Model model, HttpSession httpSession) {
-        UserSession.getUser(model, httpSession);
-        model.addAttribute("newTasks", service.findByDone(false));
+        User user = UserSession.getUser(model, httpSession);
+        model.addAttribute("newTasks", service.findByDone(false, user));
         return "tasks/new";
     }
 
@@ -128,8 +128,8 @@ public class TaskController {
      */
     @GetMapping("/{taskId}")
     public String updateTask(Model model, @PathVariable("taskId") int taskId, HttpSession httpSession) {
-        UserSession.getUser(model, httpSession);
-        Optional<Task> taskDb = service.findById(taskId);
+        User user = UserSession.getUser(model, httpSession);
+        Optional<Task> taskDb = service.findById(taskId, user);
         if (taskDb.isEmpty()) {
             return "redirect:/tasks/all?fail=true";
         }
@@ -163,8 +163,8 @@ public class TaskController {
      */
     @GetMapping("/edit/{taskId}")
     public String formUpdateTask(Model model, @PathVariable("taskId") int taskId, HttpSession httpSession) {
-        UserSession.getUser(model, httpSession);
-        Optional<Task> taskDb = service.findById(taskId);
+        User user = UserSession.getUser(model, httpSession);
+        Optional<Task> taskDb = service.findById(taskId, user);
         if (taskDb.isEmpty()) {
             return "redirect:/tasks/all?fail=true";
         }
