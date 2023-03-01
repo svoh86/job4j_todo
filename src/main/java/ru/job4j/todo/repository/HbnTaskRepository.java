@@ -26,8 +26,11 @@ public class HbnTaskRepository implements TaskRepository {
     private static final String FIND_BY_ID = "FROM Task t JOIN FETCH t.priority JOIN FETCH t.categories WHERE t.id = :fId";
     private static final String FIND_BY_LIKE_DESCRIPTION = "FROM Task t JOIN FETCH t.priority JOIN FETCH t.categories WHERE description LIKE :fKey";
     private static final String FIND_BY_DONE = "SELECT DISTINCT t FROM Task t JOIN FETCH t.priority "
-                                               + "JOIN FETCH t.categories WHERE done = :fDone";
+            + "JOIN FETCH t.categories WHERE done = :fDone AND t.user.id = :fId";
     private static final String UPDATE_DONE = "UPDATE Task SET done = true WHERE id = :fId";
+
+    private static final String FIND_BY_USER_ID = "SELECT DISTINCT t FROM Task t JOIN FETCH t.priority "
+            + "JOIN FETCH t.categories WHERE t.user.id = :fId";
 
     /**
      * Добавляет задачу в БД
@@ -101,15 +104,16 @@ public class HbnTaskRepository implements TaskRepository {
     /**
      * Поиск по состоянию задачи
      *
-     * @param flag состояние задачи
+     * @param flag   состояние задачи
+     * @param userId id пользователя
      * @return список задач
      */
     @Override
-    public List<Task> findByDone(boolean flag) {
+    public List<Task> findByDone(boolean flag, int userId) {
         return crudRepository.query(
                 FIND_BY_DONE,
                 Task.class,
-                Map.of("fDone", flag));
+                Map.of("fDone", flag, "fId", userId));
     }
 
     /**
@@ -121,6 +125,19 @@ public class HbnTaskRepository implements TaskRepository {
     public boolean changeDone(int id) {
         return crudRepository.condition(
                 UPDATE_DONE,
+                Map.of("fId", id));
+    }
+
+    /**
+     * Поиск задач по id пользователя
+     *
+     * @param id id пользователя
+     * @return список задач
+     */
+    @Override
+    public List<Task> findByUserId(int id) {
+        return crudRepository.query(FIND_BY_USER_ID,
+                Task.class,
                 Map.of("fId", id));
     }
 }

@@ -121,7 +121,7 @@ public class SimpleTaskService implements TaskService {
      */
     @Override
     public List<Task> findByDone(boolean flag, User user) {
-        List<Task> taskList = repository.findByDone(flag);
+        List<Task> taskList = repository.findByDone(flag, user.getId());
         UserZone.setTimeZone(user, taskList);
         return taskList;
     }
@@ -129,5 +129,19 @@ public class SimpleTaskService implements TaskService {
     @Override
     public boolean changeDone(int id) {
         return repository.changeDone(id);
+    }
+
+    /**
+     * Ищет задачи по id пользователя и устанавливает им время
+     * с учетом часового пояса пользователя.
+     *
+     * @param user пользователь
+     * @return список задач
+     */
+    @Override
+    public List<Task> findByUserId(User user) {
+        List<Task> taskList = repository.findByUserId(user.getId());
+        UserZone.setTimeZone(user, taskList);
+        return taskList;
     }
 }

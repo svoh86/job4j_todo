@@ -28,4 +28,6 @@ public interface TaskService {
     List<Task> findByDone(boolean flag, User user);
 
     boolean changeDone(int id);
+
+    List<Task> findByUserId(User user);
 }

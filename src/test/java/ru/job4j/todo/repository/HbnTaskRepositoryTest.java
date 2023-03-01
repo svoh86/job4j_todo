@@ -129,7 +129,7 @@ class HbnTaskRepositoryTest {
         anotherTask.setUser(user);
         repository.add(task);
         repository.add(anotherTask);
-        List<Task> listByDone = repository.findByDone(true);
+        List<Task> listByDone = repository.findByDone(true, user.getId());
         List<Task> taskList = List.of(anotherTask);
         assertThat(listByDone).isEqualTo(taskList);
     }

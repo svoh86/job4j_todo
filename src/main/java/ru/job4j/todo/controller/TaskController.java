@@ -78,7 +78,7 @@ public class TaskController {
     }
 
     /**
-     * Показывает страницу со всеми задачами
+     * Показывает страницу со всеми задачами конкретного пользователя
      *
      * @param model Model
      * @return tasks/all
@@ -88,13 +88,13 @@ public class TaskController {
                            @RequestParam(name = "fail", required = false) Boolean fail,
                            HttpSession httpSession) {
         User user = UserSession.getUser(model, httpSession);
-        model.addAttribute("all", service.findAll(user));
+        model.addAttribute("all", service.findByUserId(user));
         model.addAttribute("fail", fail != null);
         return "tasks/all";
     }
 
     /**
-     * Показывает страницу с выполненными заданиями
+     * Показывает страницу с выполненными заданиями конкретного пользователя
      *
      * @param model Model
      * @return tasks/done
@@ -107,7 +107,7 @@ public class TaskController {
     }
 
     /**
-     * Показывает страницу с новыми заданиями
+     * Показывает страницу с новыми заданиями конкретного пользователя
      *
      * @param model Model
      * @return tasks/new

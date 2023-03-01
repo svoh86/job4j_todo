@@ -24,7 +24,9 @@ public interface TaskRepository {
 
     List<Task> findByLikeDescription(String key);
 
-    List<Task> findByDone(boolean flag);
+    List<Task> findByDone(boolean flag, int userId);
 
     boolean changeDone(int id);
+
+    List<Task> findByUserId(int id);
 }
