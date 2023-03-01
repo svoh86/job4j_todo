@@ -37,7 +37,7 @@ Web-приложение "TODO список". Показывает список 
 указанными в src/main/resources/db.properties, или заменить на свои параметры.
 
 Варианты запуска приложения:
-1. Упаковать проект в jar архив (job4j_cinema/target/job4j_todo-1.0.jar):
+1. Упаковать проект в jar архив (job4j_todo/target/job4j_todo-1.0.jar):
 ``` 
 mvn package
 ``` 
@@ -54,13 +54,13 @@ mvn spring-boot:run
 Начальная страница
 ![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/start.png)
 
-Все задачи. Здесь можно выбрать конкретную задачу.
+Все задачи конкретного пользователя. Здесь можно выбрать конкретную задачу.
 ![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/allTasks.png)
 
-Только выполненные задачи
+Только выполненные задачи конкретного пользователя.
 ![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/doneTasks.png)
 
-Только новые задачи
+Только новые задачи конкретного пользователя.
 ![alt text](https://github.com/svoh86/job4j_todo/blob/master/img/newTasks.png)
 
 Для конкретной задачи можно установить состояние "Выполнено", отредактировать задачу или удалить
